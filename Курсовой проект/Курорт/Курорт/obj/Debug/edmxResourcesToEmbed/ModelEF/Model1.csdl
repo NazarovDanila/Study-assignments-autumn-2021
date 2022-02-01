@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KurortDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CustomerSurname" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="CustomerName" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="CustomerPatronymic" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="CustomerPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Requests" Relationship="Self.FK__Requests__Custom__300424B4" FromRole="Customers" ToRole="Requests" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="Login" />
+    </Key>
+    <Property Name="Login" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="Surname" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="Patronymic" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="PostID" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="Phone_number" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Posts" Relationship="Self.FK__Employees__PostI__267ABA7A" FromRole="Employees" ToRole="Posts" />
+    <NavigationProperty Name="Requests" Relationship="Self.FK__Requests__Login__2F10007B" FromRole="Employees" ToRole="Requests" />
+  </EntityType>
+  <EntityType Name="FoodTypes">
+    <Key>
+      <PropertyRef Name="FoodTypeID" />
+    </Key>
+    <Property Name="FoodTypeID" Type="String" MaxLength="2" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FoodTypeName" Type="String" MaxLength="25" FixedLength="true" Unicode="true" />
+    <Property Name="FoodTypePrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="FoodTypeDescription" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Requests" Relationship="Self.FK__Requests__FoodTy__31EC6D26" FromRole="FoodTypes" ToRole="Requests" />
+  </EntityType>
+  <EntityType Name="HotelRooms">
+    <Key>
+      <PropertyRef Name="RoomID" />
+    </Key>
+    <Property Name="RoomID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="HowManyPeople" Type="Int32" />
+    <Property Name="RoomPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="OccupiedOrFree" Type="Boolean" />
+    <NavigationProperty Name="Requests" Relationship="Self.FK__Requests__RoomID__30F848ED" FromRole="HotelRooms" ToRole="Requests" />
+  </EntityType>
+  <EntityType Name="Posts">
+    <Key>
+      <PropertyRef Name="PostID" />
+    </Key>
+    <Property Name="PostID" Type="String" MaxLength="2" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PostName" Type="String" MaxLength="25" FixedLength="true" Unicode="true" />
+    <Property Name="PostSalary" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK__Employees__PostI__267ABA7A" FromRole="Posts" ToRole="Employees" />
+  </EntityType>
+  <EntityType Name="Requests">
+    <Key>
+      <PropertyRef Name="RequestID" />
+    </Key>
+    <Property Name="RequestID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Login" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+    <Property Name="RoomID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+    <Property Name="FoodTypeID" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="Check_inDate" Type="DateTime" Precision="3" />
+    <Property Name="EvictionDate" Type="DateTime" Precision="3" />
+    <Property Name="TotalСost" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Customers" Relationship="Self.FK__Requests__Custom__300424B4" FromRole="Requests" ToRole="Customers" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK__Requests__Login__2F10007B" FromRole="Requests" ToRole="Employees" />
+    <NavigationProperty Name="FoodTypes" Relationship="Self.FK__Requests__FoodTy__31EC6D26" FromRole="Requests" ToRole="FoodTypes" />
+    <NavigationProperty Name="HotelRooms" Relationship="Self.FK__Requests__RoomID__30F848ED" FromRole="Requests" ToRole="HotelRooms" />
+  </EntityType>
+  <Association Name="FK__Requests__Custom__300424B4">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+    <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Requests">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Employees__PostI__267ABA7A">
+    <End Role="Posts" Type="Self.Posts" Multiplicity="0..1" />
+    <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Posts">
+        <PropertyRef Name="PostID" />
+      </Principal>
+      <Dependent Role="Employees">
+        <PropertyRef Name="PostID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Requests__Login__2F10007B">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+    <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="Login" />
+      </Principal>
+      <Dependent Role="Requests">
+        <PropertyRef Name="Login" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Requests__FoodTy__31EC6D26">
+    <End Role="FoodTypes" Type="Self.FoodTypes" Multiplicity="0..1" />
+    <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FoodTypes">
+        <PropertyRef Name="FoodTypeID" />
+      </Principal>
+      <Dependent Role="Requests">
+        <PropertyRef Name="FoodTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Requests__RoomID__30F848ED">
+    <End Role="HotelRooms" Type="Self.HotelRooms" Multiplicity="0..1" />
+    <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HotelRooms">
+        <PropertyRef Name="RoomID" />
+      </Principal>
+      <Dependent Role="Requests">
+        <PropertyRef Name="RoomID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="KurortDatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Customers" EntityType="Self.Customers" />
+    <EntitySet Name="Employees" EntityType="Self.Employees" />
+    <EntitySet Name="FoodTypes" EntityType="Self.FoodTypes" />
+    <EntitySet Name="HotelRooms" EntityType="Self.HotelRooms" />
+    <EntitySet Name="Posts" EntityType="Self.Posts" />
+    <EntitySet Name="Requests" EntityType="Self.Requests" />
+    <AssociationSet Name="FK__Requests__Custom__300424B4" Association="Self.FK__Requests__Custom__300424B4">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Requests" EntitySet="Requests" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Employees__PostI__267ABA7A" Association="Self.FK__Employees__PostI__267ABA7A">
+      <End Role="Posts" EntitySet="Posts" />
+      <End Role="Employees" EntitySet="Employees" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Requests__Login__2F10007B" Association="Self.FK__Requests__Login__2F10007B">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="Requests" EntitySet="Requests" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Requests__FoodTy__31EC6D26" Association="Self.FK__Requests__FoodTy__31EC6D26">
+      <End Role="FoodTypes" EntitySet="FoodTypes" />
+      <End Role="Requests" EntitySet="Requests" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Requests__RoomID__30F848ED" Association="Self.FK__Requests__RoomID__30F848ED">
+      <End Role="HotelRooms" EntitySet="HotelRooms" />
+      <End Role="Requests" EntitySet="Requests" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
